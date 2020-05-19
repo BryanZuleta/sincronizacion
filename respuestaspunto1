@@ -1,0 +1,11 @@
+¿Cómo se utiliza esta función?
+
+Sintaxis:
+- int gettimeofday (struct timeval *tv, struct timezone *tz);
+- int gettimeofday (struct timeval *tp, NULL); 
+El uso de la estructura de zona horaria es obsoleto en  Linux - no lo ha sido y nunca será soportado por libc o glibc. El argumento tz normalmente debería especificarse como NULL.
+Return: gettimeofday() devuelve 0 para el éxito, o -1 para el fracaso.
+
+¿Cuál es el intervalo de tiempo más corto que se puede medir con esta función?
+
+el intervalo más corto fue de 0 microsegundos
