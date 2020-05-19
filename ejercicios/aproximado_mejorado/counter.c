@@ -39,3 +39,4 @@ int get(counter_t *c) {
     pthread_mutex_unlock(&c->glock);
     return val; // only approximate!
 }
+
