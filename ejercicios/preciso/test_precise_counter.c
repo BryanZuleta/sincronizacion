@@ -3,69 +3,70 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include "counter.h"
-
-
-/* structs */
-// code here (if you required it)...
+#include <pthread.h>
+#include <time.h>
 
 /* start_routine header */
-// code here...
+void* counter(void *);
 
 /* Global variables */
-// code here (if you required it)...
+int MAXCNT, NUMTHREADS;
+counter_t count;
 
 int main(int argc, char *argv[]) { 
 
     /* get the command's line parameters */
-    // code here...
-
+    MAXCNT = atoi(argv[1]);
+    NUMTHREADS = atoi(argv[2]);
 
     /* Declaration of struct timeval variables */
-    // code here...
-
+    struct timeval ti, tf;
+    time_t curtime;
+    double time;
+    char buffer[30];
 
     /* Initializing conter */
-    // code here...
-
+    init(&count);
 
     /* Threads handlers */
-    // code here...
-
-
-    /* Thread creation */
-    // code here...
-
+    pthread_t threadsArray[NUMTHREADS - 1];
 
     /* Time starts counting */
-    // code here...
-
+    gettimeofday(&ti, NULL);
 
     /* Creating a Threads */
-    // code here...
-   
+    for (int i = 0; i < NUMTHREADS; i++){
+        /* Thread creation */
+        pthread_create(&threadsArray[i], NULL, &counter, NULL);
+    }
 
     /* Threads joins */
-    // code here...
-
+    for (int i = 0; i < NUMTHREADS; i++){
+        /* Threads joins */
+        pthread_join(threadsArray[i], NULL);
+    }
 
     /* Time stops counting here */
-    // code here...
-
+    gettimeofday(&tf, NULL);
 
     /* get the end time */
-    // code here...
-    
+    curtime = tf.tv_sec;
+    strftime(buffer, 30,"%T.",localtime(&curtime));
+    printf("End time: %s%ld\n", buffer, tf.tv_sec);
 
     /* get the elapset time (end_time - start_time) */
-    // code here...
-
+    time = (tf.tv_sec - ti.tv_sec)*1000 + (tf.tv_usec - ti.tv_usec)/1000.0;
 
     /* print the results (number threads employed, counter value, elasep time) */
-    // code here...
-
+    printf("Number threads employed: %d\nCounter value: %d\nElasep time: %g milisegundos\n", NUMTHREADS, get(&count), time);
 
     return 0;
 }
 
 /* start_routine definition */
-// code here...
+void* counter(void * noArg){
+    for (int i = 0; i < MAXCNT; i++){
+        increment(&count);
+    }
+    return NULL;
+}
